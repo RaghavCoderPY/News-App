@@ -1,27 +1,24 @@
 import requests
 import json
 
-# WARNING: Use your api if you want to create using my news app
-r = requests.get("https://newsapi.org/v2/everything?q=keyword&apiKey=2ecfbfad7da544c2b87bb34fd0be53ed")
-# loads all the text
-data = json.loads(r.text)
-# checking status code
+
+query = input("Search Here 🔎 ")
+
+# Use your api key. Get your api key at https://www.newsapi.org sgin up and get it. THIS IS FREE!
+API_KEY = f"https://newsapi.org/v2/everything?q={query}&apiKey=2ecfbfad7da544c2b87bb34fd0be53ed"
+
+r = requests.get(API_KEY)
+news = json.loads(r.text)
+
 if r.status_code == 200:
-    # if articles in data
-    if "articles" in data:
-        # user input for article number
-        try:
-            num = int(input("Which article no. you want: "))
-            # article
-            article = data["articles"][num]
-            # title and description of the article
-            title = article.get("title")
-            desc = article.get("description")
-            # printing it 
-            print(f"{title}\nMore: {desc}")
-        except ValueError:
-            print("Only numbers are allowed")
+    if "articles" in news:
+        for article in news["articles"]:
+            title = article["title"]
+            desc = article["description"]
+            # Printing it 
+            print(f"⛳️ {title}\nMore - {desc}")
+            print("-------------------------------------------------------\n")
     else:
         print("No article found")
 else:
-    print(f"Sorry this is an error: {r.status_code}")
+    print(f"An Error Occured Status Code {r.status_code}")
